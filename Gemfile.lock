@@ -1,0 +1,22 @@
+PATH
+  remote: .
+  specs:
+    mtscommunicator (0.0.1)
+      crack
+      curb
+      digest
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
+    curb (0.8.6)
+    digest (0.0.1)
+    safe_yaml (1.0.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  mtscommunicator!
