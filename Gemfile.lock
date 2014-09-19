@@ -5,6 +5,7 @@ PATH
       crack
       curb
       digest
+      i18n
 
 GEM
   remote: https://rubygems.org/
@@ -13,6 +14,7 @@ GEM
       safe_yaml (~> 1.0.0)
     curb (0.8.6)
     digest (0.0.1)
+    i18n (0.6.11)
     safe_yaml (1.0.3)
 
 PLATFORMS

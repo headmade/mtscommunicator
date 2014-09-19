@@ -2,17 +2,21 @@ module MtsCommunicator
   class Base
     class << self
 
-      def templates(t=nil)
-        @templates = t if t.is_a?(Hash)
-        raise 'no template set' unless @templates.is_a?(Hash)
-        @templates
+      def templates(hash)
+        @templates = hash
       end
 
       private
 
-      def send_template(to_ids, template, vars={})
-        message = templates[template]
-        raise "unknown template (#{template.to_s})" unless message
+      def get_template(name)
+        return @templates[name] if @template && name.is_a?(Symbol)
+        return I18n.t([i18n_key,name].join('.')) if name.is_a?(String)
+        nil
+      end
+
+      def send_template(name, to_ids, vars={})
+        message = get_template(name)
+        raise "unknown template (#{name.to_s})" unless message
 
         to_ids = [to_ids] if to_ids.is_a?(String)
         vars.keys.each do |k|
@@ -22,10 +26,25 @@ module MtsCommunicator
       end
 
       def method_missing(meth, *args, &block)
-        if templates[meth]
-          send_template(args.shift, meth, *args)
+        name = meth.to_s
+        template, template_name = get_template(meth), meth
+        template, template_name = get_template(name), name unless template
+
+        # TODO: check for possible problems with RTL templates
+        if template && !template.end_with?('.'+name)
+          send_template(template_name, *args)
         else
           super
+        end
+      end
+
+      def i18n_key
+        @i18n_key ||=
+        begin
+          key = self.name
+          key[0].tr!('A-Z','a-z')
+          key.gsub!(/([a-z\d])([A-Z])([a-z\d])/) { |s| [$1,'_',$2.downcase,$3].join}
+          key.downcase
         end
       end
 

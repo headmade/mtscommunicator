@@ -13,5 +13,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'curb'
   s.add_runtime_dependency 'crack'
   s.add_runtime_dependency 'digest'
+  s.add_runtime_dependency 'i18n'
 end
 

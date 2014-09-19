@@ -1,6 +1,7 @@
 require 'crack/xml'
 require 'curb'
 require 'digest/md5'
+require 'i18n'
 require 'open-uri'
 
 require 'mtscommunicator/base'
