@@ -65,6 +65,43 @@ UserSms.hello('7917xxxyyyy', {name: 'Alex', today: Time.now})
 UserSms.state(['7917yyyxxxx','7917xxxyyyy'] , {name: 'Dear user', state: :blocked, reason: 'spam detected'})
 ```
 
+# I18n templates
+
+Let locale file has:
+```
+en:
+  user_sms:
+    hi: 'Hi %name%, how are you?'
+
+fr:
+  user_sms:
+    hi: 'Salut %name%, comment ca va?'
+```
+
+Usage:
+
+```ruby
+class UserSms < MtsCommunicator::Base; end
+
+I18n.locale = :en
+UserSms.hi('7917xxxyyyy', {name: 'user'})
+# => sends message: 'Hi user, how are you?'
+
+I18n.locale = :fr
+UserSms.hi('7917yyyxxxx', {name: 'user'})
+# => sends message: 'Salut user, comment ca va?'
+```
+
+
+Pay attention, that if you're running vanilla ruby (without Rails),
+you have to initialize i18n yourselves:
+
+```ruby
+I18n.load_path = Dir[File.dirname(__FILE__)+'/locale/*.yml']
+I18n.enforce_available_locales = false
+I18n.backend.load_translations
+```
+
 
 ## CLI
 ```
@@ -75,5 +112,13 @@ UserSms.state(['7917yyyxxxx','7917xxxyyyy'] , {name: 'Dear user', state: :blocke
 MTSC_LOGIN=login MTSC_PASSWORD=pass ./bin/mtsc_send_messages.rb 7917xxxxxxx,7917xxxxxxy test
 ```
 
-The former way is simpler, the latter is more secure (as
+The former way is simpler, the latter one is more secure (as
 authentication data is not shown on `ps` command).
+
+See additional examples in bin/*rb
+
+# Forks & pull requests
+
+Lots of official MTS Comminucator API functions are not implemented yet. So...
+
+You're welcome!
