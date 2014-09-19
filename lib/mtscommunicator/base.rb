@@ -14,6 +14,7 @@ module MtsCommunicator
         message = templates[template]
         raise "unknown template (#{template.to_s})" unless message
 
+        to_ids = [to_ids] if to_ids.is_a?(String)
         vars.keys.each do |k|
           message.gsub!("%#{k}%", vars[k].to_s)
         end
