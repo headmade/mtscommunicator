@@ -49,6 +49,23 @@ As any web service, this commands can take unpredictable time,
 so it is a good idea to run them asyncronously
 (for example, with [delayed_job](https://github.com/collectiveidea/delayed_job) ).
 
+# Template support
+
+```ruby
+class UserSms < MtsCommunicator::Base
+  templates hello: 'Hello dear %name%, your account was activated on %today%',
+            state: '%name%, your account is %state%, reason: %reason%'
+end
+```
+
+```ruby
+UserSms.hello('7917xxxyyyy', {name: 'Alex', today: Time.now})
+```
+```ruby
+UserSms.state(['7917yyyxxxx','7917xxxyyyy'] , {name: 'Dear user', state: :blocked, reason: 'spam detected'})
+```
+
+
 ## CLI
 ```
 ./bin/mtsc_send_messages.rb 7917xxxxxxx,7917xxxxxxy test login password
