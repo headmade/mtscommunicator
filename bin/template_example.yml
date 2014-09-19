@@ -1,0 +1,7 @@
+en:
+  user_sms:
+    hi: 'Hi %name%, how are you?'
+
+fr:
+  user_sms:
+    hi: 'Salut %name%, comment ca va?'
