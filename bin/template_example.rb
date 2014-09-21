@@ -5,8 +5,11 @@ MtsCommunicator::Service.configure do |config|
   config.password = ENV['MTSC_PASSWORD']
 end
 
-I18n.load_path = Dir[File.dirname(__FILE__)+'/*.yml']
+# Load I18n locale templates
+I18n.load_path = Dir[File.dirname(__FILE__)+'/template_example.yml']
 I18n.enforce_available_locales = false
+
+# Initialize I18n (need if not under Rails)
 I18n.backend.load_translations
 
 class UserSms < MtsCommunicator::Base
