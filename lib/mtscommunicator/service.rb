@@ -1,9 +1,7 @@
 module MtsCommunicator
   class Service
     class << self
-      attr_accessor :login
-      attr_accessor :password
-      attr_accessor :service_url
+      attr_writer :configuration
 
       attr_reader :last_err
 
@@ -15,9 +13,22 @@ module MtsCommunicator
         client.send_messages(*args)
       end
 
+      def configure
+        yield(configuration)
+      end
+
+      def reconfigure
+        @configuration = Configuration.new
+        yield(configuration)
+      end
+
+      def configuration
+        @configuration ||= Configuration.new
+      end
+
       private
       def client
-        Client.new(login, password, {service_url: service_url})
+        Client.new(configuration)
       end
     end
   end

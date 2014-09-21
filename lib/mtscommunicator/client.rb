@@ -1,25 +1,15 @@
 module MtsCommunicator
   class Client
 
-    attr_accessor :login
-    attr_accessor :password
-    attr_accessor :service_url
+    attr_accessor :config
+    attr_accessor :digest_password
 
     attr_reader :last_err
 
-    def self.service_url_default
-      'http://www.mcommunicator.ru/m2m/m2m_api.asmx'
-    end
+    def initialize(config)
+      self.config = config.is_a?(Configuration) ? config : Configuration.new(config)
 
-    def initialize(login, password, options = {})
-      self.login = login
-      self.password = Digest::MD5.hexdigest(password)
-
-      self.service_url = options[:service_url]
-    end
-
-    def service_url
-      @service_url || self.class.service_url_default
+      self.digest_password = Digest::MD5.hexdigest(config.password)
     end
 
 
@@ -41,12 +31,17 @@ module MtsCommunicator
     def command(cmd, params = {})
       # MTS Communicator service uses a special (XML-like?) way to pass list arguments
       # (for example, msid = [1,2,3] should become 'msid=1&msid=2&msid=3')
-      # so had to use custom encode_params() to build http query string
+      # so could not rely on Curb's features and
+      # had to use custom encode_params() to build http query string
       url = '%s/%s?%s' % [
-        service_url,
+        config.service_url,
         cmd,
-        encode_params(params.merge(login: @login, password: @password))
+        encode_params({
+          login: config.login,
+          password: self.digest_password
+        }.merge(params))
       ]
+      #puts url; return # for test
       parse_response(Curl.get(url).body_str)
     end
 

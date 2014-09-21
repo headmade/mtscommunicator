@@ -29,7 +29,6 @@ module MtsCommunicator
         name = meth.to_s
         template, template_name = get_template(meth), meth
         template, template_name = get_template(name), name unless template
-
         # TODO: check for possible problems with RTL templates
         if template && !template.end_with?('.'+name)
           send_template(template_name, *args)
