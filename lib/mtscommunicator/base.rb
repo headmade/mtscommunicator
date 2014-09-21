@@ -9,7 +9,7 @@ module MtsCommunicator
       private
 
       def get_template(name)
-        return @templates[name] if @template && name.is_a?(Symbol)
+        return @templates[name] if @templates && name.is_a?(Symbol)
         return I18n.t([i18n_key,name].join('.')) if name.is_a?(String)
         nil
       end
