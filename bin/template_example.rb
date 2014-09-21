@@ -17,11 +17,15 @@ class UserSms < MtsCommunicator::Base
             state: '%name%, your account is %state%, reason: %reason%'
 end
 
-UserSms.hello('7917xxxyyyy', {name: 'Alex', today: Time.now})
-UserSms.state('7917yyyxxxx', {name: 'Ivan', state: :blocked, reason: 'spam detected'})
+def display_result(res)
+  puts res.inspect
+end
+
+display_result( UserSms.hello('7917xxxyyyy', {name: 'Alex', today: Time.now}) )
+display_result( UserSms.state('7917yyyxxxx', {name: 'Ivan', state: :blocked, reason: 'spam detected'}) )
 
 I18n.locale = :en
-UserSms.hi('7917xxxyyyy', {name: 'user'})
+display_result( UserSms.hi('7917xxxyyyy', {name: 'user'}) )
 I18n.locale = :fr
-UserSms.hi('7917yyyxxxx', {name: 'user'})
+display_result( UserSms.hi('7917yyyxxxx', {name: 'user'}) )
 
