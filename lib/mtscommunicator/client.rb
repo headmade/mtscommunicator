@@ -77,6 +77,7 @@ module MtsCommunicator
         @last_err = 'INVALID_RESPONSE'
         return nil
       end
+      @last_err = nil
       ::Crack::XML.parse(resp)
     end
 
