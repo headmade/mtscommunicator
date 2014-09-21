@@ -115,7 +115,7 @@ MTSC_LOGIN=login MTSC_PASSWORD=pass ./bin/mtsc_send_messages.rb 7917xxxxxxx,7917
 The former way is simpler, the latter one is more secure (as
 authentication data is not shown on `ps` command).
 
-See additional examples in bin/*rb
+See additional examples in bin/\*rb
 
 # Forks & pull requests
 
