@@ -16,25 +16,28 @@ Or add to Gemfile
 ## Use as communication object
 
 ```ruby
-client = MtsCommunicator::Client.new('login', 'password')
+client = MtsCommunicator::Client.new(login: 'login', password: 'password')
 client.send_message('7917xxxxxxx', 'hello')
 client.send_messages(['7917xxxxxxx', '7917xxxxxxy'], 'hello')
 ```
 
 At the moment of writing,
 MTS Communicator service unifies given recipients
-(that is, each given recipient received a message only once, while can appear several times in the list of recipients).
+(that is, each given recipient receives a message only once, even if he  several times appeared in the list of recipients).
 
 ## Use as service
 
 ### Initialization
 
 ```ruby
-MtsCommunicator::Service.login='login'
-MtsCommunicator::Service.password='password'
+MtsCommunicator::Service.configure do |config|
+  config.login = 'login'
+  config.password = 'password'
+end
 ```
 
-In Rails, this should be done in `config/initializers/mtscommunicator.rb` .
+In Rails, this should be done in `config/initializers/mtscommunicator.rb`.
+Also one could prefer to use `config/secrets.yml` to store auth credentials.
 
 
 ### Use in code
@@ -130,4 +133,3 @@ You're welcome!
 3. Commit your changes (```git commit -am 'Added some feature'```)
 4. Push to the branch (```git push origin my-new-feature```)
 5. Create new Pull Request
-
