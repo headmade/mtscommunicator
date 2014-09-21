@@ -6,6 +6,18 @@ module MtsCommunicator
         @templates = hash
       end
 
+      def method_missing(meth, *args, &block)
+        name = meth.to_s
+        template, template_name = get_template(meth), meth
+        template, template_name = get_template(name), name unless template
+        # TODO: check for possible problems with RTL templates
+        if template && !template.end_with?('.'+name)
+          send_template(template_name, *args)
+        else
+          super
+        end
+      end
+
       private
 
       def get_template(name)
@@ -23,18 +35,6 @@ module MtsCommunicator
           message.gsub!("%#{k}%", vars[k].to_s)
         end
         MtsCommunicator::Service.send_messages(to_ids, message)
-      end
-
-      def method_missing(meth, *args, &block)
-        name = meth.to_s
-        template, template_name = get_template(meth), meth
-        template, template_name = get_template(name), name unless template
-        # TODO: check for possible problems with RTL templates
-        if template && !template.end_with?('.'+name)
-          send_template(template_name, *args)
-        else
-          super
-        end
       end
 
       def i18n_key
