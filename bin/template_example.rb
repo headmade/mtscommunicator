@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby -Ilib -rmtscommunicator
 
-MtsCommunicator::Service.login = ENV['MTSC_LOGIN']
-MtsCommunicator::Service.password = ENV['MTSC_PASSWORD']
+MtsCommunicator::Service.configure do |config|
+  config.login = ENV['MTSC_LOGIN']
+  config.password = ENV['MTSC_PASSWORD']
+end
 
 I18n.load_path = Dir[File.dirname(__FILE__)+'/*.yml']
 I18n.enforce_available_locales = false
