@@ -31,7 +31,7 @@ module MtsCommunicator
     def command(cmd, params = {})
       # MTS Communicator service uses a special (XML-like?) way to pass list arguments
       # (for example, msid = [1,2,3] should become 'msid=1&msid=2&msid=3')
-      # so could not rely on Curb's features and
+      # so could not rely on any query generation engine and
       # had to use custom encode_params() to build http query string
       url = '%s/%s?%s' % [
         config.service_url,
@@ -42,7 +42,7 @@ module MtsCommunicator
         }.merge(params))
       ]
       #puts url; return # for test
-      parse_response(Curl.get(url).body_str)
+      parse_response(open(url).read())
     end
 
     def encode_params(params={})
