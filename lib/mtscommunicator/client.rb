@@ -9,71 +9,45 @@ module MtsCommunicator
     def initialize(config)
       self.config = config.is_a?(Configuration) ? config : Configuration.new(config)
 
-      self.digest_password = Digest::MD5.hexdigest(config.password)
+      self.digest_password = Digest::MD5.hexdigest(self.config.password)
     end
-
 
     def send_message(to_id, message)
       raise 'invalid to_id' unless to_id.is_a?(String)
       raise 'invalid message' unless message.is_a?(String)
-      command(:SendMessage, {msid: to_id, message: message, naming: ''})
+      res = command(:send_message, {msid: to_id, message: message, naming: ''})
+      res = res.body
+      {
+        to_id: to_id,
+        stored_id: res && res[:send_message_response] && res[:send_message_response][:send_message_result],
+      }
     end
 
     def send_messages(to_ids, message)
       raise 'invalid message' unless message.is_a?(String)
       raise 'invalid to_ids' unless to_ids.is_a?(Array)
+      #return 'NO_MSID' unless to_ids.any?
 
-      command(:SendMessages, {msids: to_ids, message: message, naming: ''})
+      # TODO: wtf it does not work :-?
+      #command(:send_messages, {msids: to_ids.uniq, message: message, naming: ''})
+
+      to_ids.uniq.map do |to_id|
+        send_message(to_id, message)
+      end
     end
 
     private
 
+    def client
+      @client ||= Savon.client(wsdl: [config.service_url,'?wsdl'].join)
+    end
+
     def command(cmd, params = {})
-      # MTS Communicator service uses a special (XML-like?) way to pass list arguments
-      # (for example, msid = [1,2,3] should become 'msid=1&msid=2&msid=3')
-      # so could not rely on any query generation engine and
-      # had to use custom encode_params() to build http query string
-      url = '%s/%s?%s' % [
-        config.service_url,
-        cmd,
-        encode_params({
-          login: config.login,
-          password: self.digest_password
-        }.merge(params))
-      ]
-      #puts url; return # for test
-      parse_response(open(url).read())
+      client.call(cmd, message: auth_params.merge(params))
     end
 
-    def encode_params(params={})
-      res = []
-      params.keys.map do |k|
-        v = params[k]
-        if v.is_a?(Array)
-          res += v.map{ |s| encode_pair(k,s) }
-        else
-          res << encode_pair(k,v)
-        end
-      end
-      res.join('&')
-    end
-
-    def encode_pair(k,v)
-      [URI::encode(k.to_s),URI::encode(v.to_s)].join('=')
-    end
-
-    def parse_response(resp)
-      if resp.is_a?(String)
-        if resp[0] != '<'
-          @last_err = resp.chomp
-          return nil
-        end
-      else
-        @last_err = 'INVALID_RESPONSE'
-        return nil
-      end
-      @last_err = nil
-      ::Crack::XML.parse(resp)
+    def auth_params
+      @auth_params ||= {login: config.login, password: self.digest_password}
     end
 
   end

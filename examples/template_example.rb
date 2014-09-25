@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby -Ilib -rmtscommunicator
 
+require 'json'
+
 MtsCommunicator::Service.configure do |config|
   config.login = ENV['MTSC_LOGIN']
   config.password = ENV['MTSC_PASSWORD']
@@ -18,7 +20,7 @@ class UserSms < MtsCommunicator::Base
 end
 
 def display_result(res)
-  puts res.inspect
+  puts res.to_json
 end
 
 display_result( UserSms.hello('7917xxxyyyy', {name: 'Alex', today: Time.now}) )

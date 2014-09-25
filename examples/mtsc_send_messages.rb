@@ -2,14 +2,12 @@
 
 require 'json'
 
-MtsCommunicator::Service.configure do |config|
-  config.login = ENV['MTSC_LOGIN'] || ARGV[2]
-  config.password = ENV['MTSC_PASSWORD'] || ARGV[3]
-end
+mtsc_client = MtsCommunicator::Client.new(
+  login: ENV['MTSC_LOGIN'] || ARGV[2],
+  password: ENV['MTSC_PASSWORD'] || ARGV[3]
+)
 
-res = MtsCommunicator::Service.send_messages(ARGV[0].split(','), ARGV[1])
-err = MtsCommunicator::Service.last_err
+res = mtsc_client.send_messages(ARGV[0].split(','), ARGV[1])
 
-puts( {res: res, err: err}.to_json )
+puts( res.to_json )
 
-exit 1 unless err.nil?

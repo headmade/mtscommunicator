@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://rubygems.org/gems/mtscommunicator'
   s.license       = 'MIT'
 
-  s.add_runtime_dependency 'crack'
   s.add_runtime_dependency 'digest'
   s.add_runtime_dependency 'i18n'
+  s.add_runtime_dependency 'savon'
 end
 

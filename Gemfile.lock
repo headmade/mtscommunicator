@@ -2,20 +2,47 @@ PATH
   remote: .
   specs:
     mtscommunicator (0.0.1)
-      crack
-      curb
       digest
       i18n
+      savon
 
 GEM
   remote: https://rubygems.org/
   specs:
-    crack (0.4.2)
-      safe_yaml (~> 1.0.0)
-    curb (0.8.6)
+    akami (1.2.2)
+      gyoku (>= 0.4.0)
+      nokogiri
+    builder (3.2.2)
     digest (0.0.1)
+    gyoku (1.1.1)
+      builder (>= 2.1.2)
+    httpi (2.2.7)
+      rack
     i18n (0.6.11)
-    safe_yaml (1.0.3)
+    macaddr (1.7.1)
+      systemu (~> 2.6.2)
+    mime-types (1.25.1)
+    mini_portile (0.6.0)
+    nokogiri (1.6.3.1)
+      mini_portile (= 0.6.0)
+    nori (2.4.0)
+    rack (1.5.2)
+    savon (2.7.2)
+      akami (~> 1.2.0)
+      builder (>= 2.1.2)
+      gyoku (~> 1.1.0)
+      httpi (~> 2.2.3)
+      nokogiri (>= 1.4.0)
+      nori (~> 2.4.0)
+      uuid (~> 2.3.7)
+      wasabi (~> 3.3.0)
+    systemu (2.6.4)
+    uuid (2.3.7)
+      macaddr (~> 1.0)
+    wasabi (3.3.0)
+      httpi (~> 2.0)
+      mime-types (< 2.0.0)
+      nokogiri (>= 1.4.0)
 
 PLATFORMS
   ruby

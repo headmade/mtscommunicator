@@ -1,7 +1,6 @@
-require 'crack/xml'
 require 'digest/md5'
 require 'i18n'
-require 'open-uri'
+require 'savon'
 
 require 'mtscommunicator/base'
 require 'mtscommunicator/client'
